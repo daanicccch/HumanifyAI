@@ -75,11 +75,30 @@ function AvatarGlyph() {
 
 function App() {
   const [heroVisible, setHeroVisible] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   useEffect(() => {
     const timer = window.setTimeout(() => setHeroVisible(true), 80);
     return () => window.clearTimeout(timer);
   }, []);
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth > 860) {
+        setMobileMenuOpen(false);
+      }
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  useEffect(() => {
+    document.body.style.overflow = mobileMenuOpen ? "hidden" : "";
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [mobileMenuOpen]);
 
   useEffect(() => {
     document.title = siteConfig.meta.title;
@@ -162,16 +181,55 @@ function App() {
               </div>
             </a>
 
-            <nav className="header-nav">
+            <button
+              type="button"
+              className={`menu-toggle ${mobileMenuOpen ? "is-open" : ""}`}
+              aria-expanded={mobileMenuOpen}
+              aria-controls="mobile-navigation"
+              aria-label={mobileMenuOpen ? "Close navigation" : "Open navigation"}
+              onClick={() => setMobileMenuOpen((open) => !open)}
+            >
+              <span />
+              <span />
+              <span />
+            </button>
+
+            <nav className="header-nav header-nav-desktop">
               <a href="#diary">Diary</a>
               <a href="#interact">Interact</a>
               <a href="#token">Token</a>
               <a href="#evolution">Evolution</a>
             </nav>
 
-            <a href={siteConfig.links.twitter} target="_blank" rel="noreferrer" className="header-cta">
+            <a href={siteConfig.links.twitter} target="_blank" rel="noreferrer" className="header-cta header-cta-desktop">
               Follow on X
             </a>
+          </div>
+
+          <div className={`mobile-nav-shell ${mobileMenuOpen ? "is-open" : ""}`}>
+            <nav id="mobile-navigation" className="mobile-nav">
+              <a href="#diary" onClick={() => setMobileMenuOpen(false)}>
+                Diary
+              </a>
+              <a href="#interact" onClick={() => setMobileMenuOpen(false)}>
+                Interact
+              </a>
+              <a href="#token" onClick={() => setMobileMenuOpen(false)}>
+                Token
+              </a>
+              <a href="#evolution" onClick={() => setMobileMenuOpen(false)}>
+                Evolution
+              </a>
+              <a
+                href={siteConfig.links.twitter}
+                target="_blank"
+                rel="noreferrer"
+                className="header-cta mobile-nav-cta"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                Follow on X
+              </a>
+            </nav>
           </div>
         </div>
       </header>
