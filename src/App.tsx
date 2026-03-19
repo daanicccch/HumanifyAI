@@ -174,7 +174,9 @@ function App() {
         <div className="container">
           <div className="header-shell">
             <a href="#top" className="brand-lockup">
-              <span className="brand-mark">{siteConfig.brand.symbol}</span>
+              <span className="brand-mark">
+                <img src="/humanify-avatar.jpg" alt={`${siteConfig.brand.name} logo`} />
+              </span>
               <div>
                 <strong>{siteConfig.brand.name}</strong>
                 <span>{siteConfig.brand.tagline}</span>
